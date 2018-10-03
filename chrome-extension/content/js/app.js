@@ -22,7 +22,6 @@ let App = {
                 App.web3Provider = web3.currentProvider;
             } else {
                 App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
-                return;
             }
             web3 = new Web3(App.web3Provider);
             if (web3 == null || typeof web3 === 'undefined') {
@@ -108,7 +107,7 @@ let App = {
         console.log(`${App.account}: ${balance_eth / 1e18} ETH`);
     },
 
-    fetch: async () => {
+    fetchDomain: async () => {
         let dns_domain = $('#dns_domain').val();
         let domainConnector = await App.getDomainConnector(dns_domain);
         let domainHtml = await App.getDomainHtml(dns_domain);
@@ -116,12 +115,50 @@ let App = {
         $("#dns_output").html(domainHtml);
     },
 
+    fetchConnector: async (type) => {
+        // let domainConnector = await App.getDomainConnector(dns_domain);
+        // let data;
+        // $("#dns_output").html(data);
+        console.log(type)
+        let choice = "ipfs";
+        // let url = "";
+        let dns_domain = $('#dns_connector').val();
+        // console.log(`DNS Domain: ${dns_domain}`);
+        //
+        if (type === "ipfs") {
+            cURL(`https://gateway.ipfs.io/ipfs/${dns_domain}`);
+        } else if (type === "url") {
+            cURL(dns_domain);
+        }
+    },
 };
 
 
+function cURL(url) {
+    $.ajax({
+        method: "GET",
+        url: url,
+        data: {}
+    })
+        .done(data => {
+            console.log(data)
+            $("#dns_output").html(data);
+        })
+        .catch(err => {
+            switch (err.status) {
+                case 400:
+                case 404:
+                    console.log("Switching...");
+                    break;
+            }
+        });
+}
+
 window.addEventListener('load', async function () {
     $(document).on('click', '#dns_register_button', App.register);
-    $(document).on('click', '#dns_fetch_button', App.fetch);
+    $(document).on('click', '#dns_fetch_domain_button', App.fetchDomain);
+    $(document).on('click', '#dns_fetch_connector_button', App.fetchConnector);
+
     await App.initWeb3();
     await App.load();
     await App.initDNSContract();

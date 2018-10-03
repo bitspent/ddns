@@ -14,16 +14,45 @@
 <div class="container-fluid">
     <form class="col-md-6 center lower">
         <div class="form-group">
-            <label for="dns_domain">DNS Domain</label>
-            <input type="text" placeholder="Enter the domain name dns://" id="dns_domain" size="40"/>
+            <label for="dns_domain">DNS Domain</label><br/>
+            <input type="text" class="form-control" placeholder="Enter the domain name dns://" id="dns_domain"
+                   size="40"/>
         </div>
-        <button type="button" class="btn btn-primary" id="dns_fetch_button">Fetch</button>
+
+        <div class="form-group">
+            <label for="dns_domain">DNS Connector</label><br/>
+            <input type="text" class="form-control" placeholder="Enter the domain connector (URL, IP, IPFS)"
+                   id="dns_connector"
+                   size="40"/>
+
+        </div>
+
+        <div class="form-group">
+            <label for="dns_raw">DNS Raw HTML</label><br/>
+            <textarea class="form-control" placeholder="Enter the raw html" id="dns_raw" rows="4" cols="50"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="dns_register_button">Register</button>
+        <button type="button" class="btn btn-primary" id="dns_fetch_domain_button">Fetch domain data</button>
+        <button type="button" class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Fetch connector data
+        </button>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" onclick="App.fetchConnector('ipfs')">IPFS</a>
+            <a class="dropdown-item" onclick="App.fetchConnector('url')">URL</a>
+        </div>
     </form>
+
+
     <div class="container" id="dns_output">
 
     </div>
 </div>
 <script src="./content/js/utils/jquery-3.3.1.min.js"></script>
+<script src="./content/js/utils/popper.min.js"></script>
+<script src="./content/bootstrap/js/bootstrap.min.js"></script>
 <script src="./content/js/utils/web3.min.js"></script>
 <script src="./content/js/app.js"></script>
 </body>
