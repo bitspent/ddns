@@ -75,26 +75,30 @@ let App = {
     },
 
     getDomainConnector: function (domain) {
-        App.DNSContractInstance.domainConnector(domain, {
-            from: App.account
-        }, function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(res);
-            }
+        return new Promise((resolve, reject) => {
+            App.DNSContractInstance.domainConnector(domain, {
+                from: App.account
+            }, function (err, res) {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(res);
+                }
+            });
         });
     },
 
     getDomainHtml: function (domain) {
-        App.DNSContractInstance.domainHtml(domain, {
-            from: App.account
-        }, function (err, res) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(res);
-            }
+        return new Promise((resolve, reject) => {
+            App.DNSContractInstance.domainHtml(domain, {
+                from: App.account
+            }, function (err, res) {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(res);
+                }
+            });
         });
     },
 
@@ -102,13 +106,38 @@ let App = {
         App.account = await App.getAccount();
         let balance_eth = await App.getBalance(App.account);
         console.log(`${App.account}: ${balance_eth / 1e18} ETH`);
-    }
+    },
+
+    fetch: async () => {
+        let dns_domain = $('#dns_domain').val();
+        let domainConnector = await App.getDomainConnector(dns_domain);
+        let domainHtml = await App.getDomainHtml(dns_domain);
+        console.log(domainConnector);
+        $("#dns_output").html(domainHtml);
+    },
+
 };
 
 
 window.addEventListener('load', async function () {
     $(document).on('click', '#dns_register_button', App.register);
+    $(document).on('click', '#dns_fetch_button', App.fetch);
     await App.initWeb3();
     await App.load();
     await App.initDNSContract();
 });
+
+try {
+    chrome.webRequest.onBeforeRequest.addListener(
+        function (details) {
+            return {cancel: true};
+        },
+        {urls: ["dns://*"]},
+        ["blocking"]
+    );
+} catch (err) {
+    if (err.indexOf("dns://") !== -1) {
+        console.log("Bingo")
+    }
+}
+

@@ -10,7 +10,11 @@
   "permissions": [
     "activeTab",
     "contextMenus",
-    "storage"
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "<all_urls>"
   ],
   "icons": {
     "512": "./content/images/icon.png"
