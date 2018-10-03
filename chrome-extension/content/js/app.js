@@ -68,7 +68,8 @@ let App = {
             if (err) {
                 console.log(err);
             } else {
-                console.log(res);
+                window.open(`https://ropsten.etherscan.io/tx/${res}`, '_blank');
+                window.focus();
             }
         });
     },

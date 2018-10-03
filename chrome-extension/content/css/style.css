@@ -1,0 +1,24 @@
+body, html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    color: black;
+    /* background: url('../images/rawbot_logo.png') no-repeat center bottom; */
+    background-size: cover;
+    /*font-family: 'Calibri', sans-serif;*/
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+.lower {
+    margin-top: 50px;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}

@@ -5,7 +5,7 @@
   "version": "1.0",
   "browser_action": {
     "default_icon": "./content/images/icon.png",
-    "default_popup": "dnscontract.html"
+    "default_popup": "index.html"
   },
   "permissions": [
     "activeTab",
