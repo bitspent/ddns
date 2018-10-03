@@ -1,7 +1,7 @@
 # DDNS
 Decentralized Domain Name Server
 
-DDNS a service made for you, and also by you
+DDNS is a service made for you, and also by you
 
 Your decentralized domain name server powered by DDNS token
 
