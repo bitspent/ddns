@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "DNS - chrome extension",
+  "description": "This extension will resolve the requested dns",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "./content/images/icon.png",
+    "default_popup": "dnscontract.html"
+  },
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "storage"
+  ],
+  "icons": {
+    "512": "./content/images/icon.png"
+  }
+}
