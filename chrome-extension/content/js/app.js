@@ -128,22 +128,3 @@ window.addEventListener('load', async function () {
 });
 
 
-chrome.webRequest.onBeforeRequest.addListener(
-	function (details) {
-		
-		let url = decodeURIComponent(details.url);
-		let dnsIndex = url.indexOf('q=dns://');
-		if(dnsIndex > 0) {
-			dnsIndex += 'q=dns://'.length;
-			let andIndex = url.indexOf('&');
-			url = andIndex > 0 ? url.substring(dnsIndex, andIndex) : url.substring(dnsIndex);
-			
-			alert(`detected ${url}`);
-		}
-		
-		return {cancel: true};
-	},
-	{urls: ["*://*/*"]},
-	["blocking"]
-);
-

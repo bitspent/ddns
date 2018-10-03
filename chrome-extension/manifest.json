@@ -7,6 +7,12 @@
     "default_icon": "./content/images/icon.png",
     "default_popup": "index.html"
   },
+  "background": {
+    "scripts": [
+      "./content/js/background.js"
+    ],
+    "persistent": true
+  },
   "permissions": [
     "activeTab",
     "contextMenus",
