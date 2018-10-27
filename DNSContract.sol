@@ -51,8 +51,20 @@ pragma solidity ^0.4.20;
 
 contract DNSContract is usingDNSTools {
     
-    event DomainRegistered(address holder, bytes32 domain);
+    event DomainRegistered(address indexed holder, bytes32 indexed domain);
     
+    event ConnectorChange(address indexed holder, bytes32 indexed domain);
+    
+    event RawHtmlChange(address indexed holder, bytes32 indexed domain);
+    
+    event DomainTransfer(address indexed _old, address indexed _new, bytes32 indexed domain);
+    
+    uint constant REGISTRATION_PRICE_WEI = 10**15;
+
+    uint constant CONNECTOR_UP_PRICE_WEI = 20**15;
+    
+    uint constant RAW_HTML_UPD_PRICE_WEI = 20**15;
+
     struct record {
         
         address holder;
@@ -62,12 +74,12 @@ contract DNSContract is usingDNSTools {
         string rawHtml;
         
     }
-    
-    uint constant REGISTRATION_PRICE_WEI = 10**15;
-    
+        
     address owner;
     
     mapping(bytes32 => record) sites;
+    
+    mapping(address => bytes32) transfers;
     
     constructor() public {
         owner = msg.sender;
@@ -79,7 +91,7 @@ contract DNSContract is usingDNSTools {
         
         require
         (
-            msg.value > REGISTRATION_PRICE_WEI
+            msg.value >= REGISTRATION_PRICE_WEI
             && _site != 0x00
             && sites[_site].holder == 0x00
         );
@@ -93,11 +105,65 @@ contract DNSContract is usingDNSTools {
         emit DomainRegistered(msg.sender, _site);
     }
     
+    function changeConnector(bytes32 _site, string _connector) public payable {
+        
+        require
+        (
+            msg.value >= CONNECTOR_UP_PRICE_WEI
+            && sites[_site].holder != 0x00
+        );
+        
+        sites[_site].connector = _connector;
+        
+        emit ConnectorChange(msg.sender, _site);
+    }
+    
+    function changeHtml(bytes32 _site, string _rawHtml) public payable {
+        
+        require
+        (
+            msg.value >= RAW_HTML_UPD_PRICE_WEI
+            && sites[_site].holder != 0x00
+        );
+        
+        sites[_site].rawHtml = _rawHtml;
+        
+        emit RawHtmlChange(msg.sender, _site);
+    }
+    
+    function transferDomain(bytes32 _site, address _holder) public {
+        
+        require(sites[_site].holder == msg.sender);
+        
+        transfers[_holder] = _site;
+    }
+    
+    function claimDomain(bytes32 _site) public payable {
+        
+        require
+        (
+            msg.value >= REGISTRATION_PRICE_WEI 
+            && tx.origin == msg.sender
+            && transfers[msg.sender] == _site
+        );
+        
+        emit DomainTransfer(sites[_site].holder, msg.sender, _site);
+        
+        sites[_site].holder = msg.sender;
+        
+        delete transfers[msg.sender];
+    }
+    
     function domainHtml(bytes32 _domain) public view returns(string) {
         return sites[_domain].rawHtml;
     }
     
     function domainConnector(bytes32 _domain) public view returns(string) {
         return sites[_domain].connector;
+    }
+    
+    function settle() public {
+        require(owner == msg.sender);
+        owner.transfer(address(this).balance);
     }
 }
