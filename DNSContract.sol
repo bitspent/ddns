@@ -154,6 +154,10 @@ contract DNSContract is usingDNSTools {
         delete transfers[msg.sender];
     }
     
+    function domainHolder(bytes32 _site) public view returns (address) {
+        return sites[_site].holder;
+    }
+    
     function domainHtml(bytes32 _domain) public view returns(string) {
         return sites[_domain].rawHtml;
     }
