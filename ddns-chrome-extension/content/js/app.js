@@ -1,21 +1,132 @@
 const DNSContract = {
 
-	/* 
-	 * contract ABI 
-	 */
-	abi : [{ "constant": false, "inputs": [], "name": "settle", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	},  	{   "name": "_holder",   "type": "address"  	}  ], "name": "transferDomain", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	}  ], "name": "claimDomain", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_domain",   "type": "bytes32"  	},  	{   "name": "_connector",   "type": "string"  	},  	{   "name": "_rawHtml",   "type": "string"  	}  ], "name": "register", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "constant": true, "inputs": [  	{   "name": "_domain",   "type": "bytes32"  	}  ], "name": "domainHtml", "outputs": [  	{   "name": "",   "type": "string"  	}  ], "payable": false, "stateMutability": "view", "type": "function" 	}, 	{ "constant": true, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	}  ], "name": "domainHolder", "outputs": [  	{   "name": "",   "type": "address"  	}  ], "payable": false, "stateMutability": "view", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	},  	{   "name": "_rawHtml",   "type": "string"  	}  ], "name": "changeHtml", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "constant": true, "inputs": [  	{   "name": "_domain",   "type": "bytes32"  	}  ], "name": "domainConnector", "outputs": [  	{   "name": "",   "type": "string"  	}  ], "payable": false, "stateMutability": "view", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	},  	{   "name": "_connector",   "type": "string"  	}  ], "name": "changeConnector", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "holder",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "DomainRegistered", "type": "event" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "holder",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "ConnectorChange", "type": "event" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "holder",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "RawHtmlChange", "type": "event" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "_old",   "type": "address"  	},  	{   "indexed": true,   "name": "_new",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "DomainTransfer", "type": "event" 	} ],
+    /*
+     * contract ABI
+     */
+    abi: [{
+        "constant": false,
+        "inputs": [],
+        "name": "settle",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [{"name": "_site", "type": "bytes32"}, {"name": "_holder", "type": "address"}],
+        "name": "transferDomain",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [{"name": "_site", "type": "bytes32"}],
+        "name": "claimDomain",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [{"name": "_domain", "type": "bytes32"}, {
+            "name": "_connector",
+            "type": "string"
+        }, {"name": "_rawHtml", "type": "string"}],
+        "name": "register",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [{"name": "_domain", "type": "bytes32"}],
+        "name": "domainHtml",
+        "outputs": [{"name": "", "type": "string"}],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [{"name": "_site", "type": "bytes32"}],
+        "name": "domainHolder",
+        "outputs": [{"name": "", "type": "address"}],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [{"name": "_site", "type": "bytes32"}, {"name": "_rawHtml", "type": "string"}],
+        "name": "changeHtml",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [{"name": "_domain", "type": "bytes32"}],
+        "name": "domainConnector",
+        "outputs": [{"name": "", "type": "string"}],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [{"name": "_site", "type": "bytes32"}, {"name": "_connector", "type": "string"}],
+        "name": "changeConnector",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    }, {"inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor"}, {
+        "anonymous": false,
+        "inputs": [{"indexed": true, "name": "holder", "type": "address"}, {
+            "indexed": true,
+            "name": "domain",
+            "type": "bytes32"
+        }],
+        "name": "DomainRegistered",
+        "type": "event"
+    }, {
+        "anonymous": false,
+        "inputs": [{"indexed": true, "name": "holder", "type": "address"}, {
+            "indexed": true,
+            "name": "domain",
+            "type": "bytes32"
+        }],
+        "name": "ConnectorChange",
+        "type": "event"
+    }, {
+        "anonymous": false,
+        "inputs": [{"indexed": true, "name": "holder", "type": "address"}, {
+            "indexed": true,
+            "name": "domain",
+            "type": "bytes32"
+        }],
+        "name": "RawHtmlChange",
+        "type": "event"
+    }, {
+        "anonymous": false,
+        "inputs": [{"indexed": true, "name": "_old", "type": "address"}, {
+            "indexed": true,
+            "name": "_new",
+            "type": "address"
+        }, {"indexed": true, "name": "domain", "type": "bytes32"}],
+        "name": "DomainTransfer",
+        "type": "event"
+    }],
 
-	/* 
-	 * contract ROPSTEN address 
-	 */
-	address : '0x74f169ca6d34fae11648b3334028ee4c8c4ab7e7',
-	
-	/* 
-	 * get the contract instance 
-	 */
-	instance : function () {
-		return web3.eth.contract(DNSContract.abi).at(DNSContract.address);
-	}
+    /*
+     * contract ROPSTEN address
+     */
+    address: '0x74f169ca6d34fae11648b3334028ee4c8c4ab7e7',
+
+    /*
+     * get the contract instance
+     */
+    instance: function () {
+        return web3.eth.contract(DNSContract.abi).at(DNSContract.address);
+    }
 };
 
 let App = {
@@ -87,8 +198,8 @@ let App = {
     },
 
     load: async () => {
-        
-		
+
+
     },
 
     fetchDomain: async () => {
@@ -142,14 +253,14 @@ window.addEventListener('load', async function () {
     $(document).on('click', '#dns_register_button', App.register);
 
     await App.initWeb3();
-	
-	DNSContract.instance().domainConnector(web3.fromAscii('fadyaro'), function (err, res) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log(res);
-                }
-	});
+
+    DNSContract.instance().domainConnector(web3.fromAscii('fadyaro'), function (err, res) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(res);
+        }
+    });
 });
 
 

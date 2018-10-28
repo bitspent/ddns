@@ -14,7 +14,9 @@ class App extends Component {
     };
 
     componentDidMount() {
-        const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+        // const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+        const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/plnAtKGtcoxBtY9UpS4b'));
+
         web3.eth.getAccounts().then(accounts => {
             this.setState({
                 account: accounts[0],
@@ -64,7 +66,7 @@ class App extends Component {
     };
 
     render() {
-        let {account, ddns_output, domain_name_input} = this.state;
+        let {ddns_output, domain_name_input} = this.state;
         let output = ddns_output === null ? (
             <p className="card-body left-align">Nothing to display</p>
         ) : (
