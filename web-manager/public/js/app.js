@@ -16,7 +16,7 @@ onload = async () => {
 	input.addEventListener("keyup", function(event) {
 		event.preventDefault();
 		if (event.keyCode === 13) {
-			document.getElementById("btn-check-domain").click();
+			$$("btn-check-domain").click();
 		}
 	});
 	
