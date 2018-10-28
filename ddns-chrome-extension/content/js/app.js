@@ -1,27 +1,36 @@
+const DNSContract = {
+
+	/* 
+	 * contract ABI 
+	 */
+	abi : [{ "constant": false, "inputs": [], "name": "settle", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	},  	{   "name": "_holder",   "type": "address"  	}  ], "name": "transferDomain", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	}  ], "name": "claimDomain", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_domain",   "type": "bytes32"  	},  	{   "name": "_connector",   "type": "string"  	},  	{   "name": "_rawHtml",   "type": "string"  	}  ], "name": "register", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "constant": true, "inputs": [  	{   "name": "_domain",   "type": "bytes32"  	}  ], "name": "domainHtml", "outputs": [  	{   "name": "",   "type": "string"  	}  ], "payable": false, "stateMutability": "view", "type": "function" 	}, 	{ "constant": true, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	}  ], "name": "domainHolder", "outputs": [  	{   "name": "",   "type": "address"  	}  ], "payable": false, "stateMutability": "view", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	},  	{   "name": "_rawHtml",   "type": "string"  	}  ], "name": "changeHtml", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "constant": true, "inputs": [  	{   "name": "_domain",   "type": "bytes32"  	}  ], "name": "domainConnector", "outputs": [  	{   "name": "",   "type": "string"  	}  ], "payable": false, "stateMutability": "view", "type": "function" 	}, 	{ "constant": false, "inputs": [  	{   "name": "_site",   "type": "bytes32"  	},  	{   "name": "_connector",   "type": "string"  	}  ], "name": "changeConnector", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" 	}, 	{ "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "holder",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "DomainRegistered", "type": "event" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "holder",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "ConnectorChange", "type": "event" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "holder",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "RawHtmlChange", "type": "event" 	}, 	{ "anonymous": false, "inputs": [  	{   "indexed": true,   "name": "_old",   "type": "address"  	},  	{   "indexed": true,   "name": "_new",   "type": "address"  	},  	{   "indexed": true,   "name": "domain",   "type": "bytes32"  	}  ], "name": "DomainTransfer", "type": "event" 	} ],
+
+	/* 
+	 * contract ROPSTEN address 
+	 */
+	address : '0x74f169ca6d34fae11648b3334028ee4c8c4ab7e7',
+	
+	/* 
+	 * get the contract instance 
+	 */
+	instance : function () {
+		return web3.eth.contract(DNSContract.abi).at(DNSContract.address);
+	}
+};
+
 let App = {
     web3Provider: null,
     account: null,
     DNSContractInstance: null,
-    DNSContractAddress: '0x748Bc9942b1b211056492D6DE7d6e14fE094B18A',
+    DNSContractAddress: '0x74f169ca6d34fae11648b3334028ee4c8c4ab7e7',
     DNSContract_URL: 'https://gist.githubusercontent.com/toolazytobetrue/083ad42fb570817091f75d24aafe6b79/raw/e0943e6dfd2ac74fb8b68a215994d5ae70c359f9/DNSContract.json',
-    getAccount: function () {
-        return new Promise((resolve, reject) => {
-            web3.eth.getAccounts(function (error, accounts) {
-                if (error) {
-                    return reject(error);
-                } else {
-                    return resolve(accounts[0]);
-                }
-            });
-        });
-    },
 
     initWeb3: async () => {
         return new Promise((resolve, reject) => {
             if (typeof web3 !== 'undefined') {
                 App.web3Provider = web3.currentProvider;
             } else {
-                App.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+                App.web3Provider = new Web3.providers.HttpProvider('https://ropsten.infura.io/plnAtKGtcoxBtY9UpS4b');
             }
             web3 = new Web3(App.web3Provider);
             if (web3 == null || typeof web3 === 'undefined') {
@@ -32,28 +41,6 @@ let App = {
         });
     },
 
-    initDNSContract: async () => {
-        return new Promise((resolve, reject) => {
-            $.getJSON(App.DNSContract_URL, function (data) {
-                var DNSContract_ABI = data.abi;
-                let DNSContract = web3.eth.contract(DNSContract_ABI);
-                App.DNSContractInstance = DNSContract.at(App.DNSContractAddress);
-                return resolve(true);
-            });
-        });
-    },
-
-    getBalance: function (address) {
-        return new Promise((resolve, reject) => {
-            web3.eth.getBalance(address, function (err, balance) {
-                if (!err) {
-                    return resolve(balance);
-                } else {
-                    return reject(err);
-                }
-            });
-        });
-    },
 
     register: async () => {
         let dns_domain = $('#dns_domain').val();
@@ -75,9 +62,7 @@ let App = {
 
     getDomainConnector: function (domain) {
         return new Promise((resolve, reject) => {
-            App.DNSContractInstance.domainConnector(domain, {
-                from: App.account
-            }, function (err, res) {
+            DNSContract.instance().domainConnector(web3.fromAscii('fadyaro'), function (err, res) {
                 if (err) {
                     return reject(err);
                 } else {
@@ -102,9 +87,8 @@ let App = {
     },
 
     load: async () => {
-        App.account = await App.getAccount();
-        let balance_eth = await App.getBalance(App.account);
-        console.log(`${App.account}: ${balance_eth / 1e18} ETH`);
+        
+		
     },
 
     fetchDomain: async () => {
@@ -156,12 +140,16 @@ function cURL(url) {
 
 window.addEventListener('load', async function () {
     $(document).on('click', '#dns_register_button', App.register);
-    $(document).on('click', '#dns_fetch_domain_button', App.fetchDomain);
-    $(document).on('click', '#dns_fetch_connector_button', App.fetchConnector);
 
     await App.initWeb3();
-    await App.load();
-    await App.initDNSContract();
+	
+	DNSContract.instance().domainConnector(web3.fromAscii('fadyaro'), function (err, res) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(res);
+                }
+	});
 });
 
 
