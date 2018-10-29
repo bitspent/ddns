@@ -57,20 +57,27 @@ class App extends Component {
         // console.log(DNSContractInstance)
         // console.log( DNSContractInstance.methods.domainHtml(domain_name_input_bytes32));
         DNSContractInstance.methods.domainHtml(domain_name_input_bytes32).call().then(result => {
+
+            let innerHtml = result[0] === `'` && result[result.length - 1] === `'` ? result.slice(1, result.length - 1) : result;
+
             this.setState({
-                ddns_output: result,
+                ddns_output: innerHtml,
                 domain_name_input: domain_name_input
             });
-            console.log(result)
         })
     };
 
     render() {
         let {ddns_output, domain_name_input} = this.state;
+
+        function createMarkup() {
+            return {__html: ddns_output};
+        }
+
         let output = ddns_output === null ? (
             <p className="card-body left-align">Nothing to display</p>
         ) : (
-            <p className="card-body left-align">{ddns_output}</p>
+            <div className="card-body left-align" dangerouslySetInnerHTML={createMarkup()}></div>
         );
         return (
             <div className="container">
