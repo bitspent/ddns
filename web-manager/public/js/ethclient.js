@@ -29,6 +29,7 @@ const DNSContract = {
 			console.log('web3 provider found');
 			eth.setProvider(window.web3.currentProvider);
 		} else {
+			eth.setProvider(new Web3.providers.HttpProvider('https://ropsten.infura.io/plnAtKGtcoxBtY9UpS4b'));
 			presenter.toast('Web3 Not Supported Browser <br> Try Metamask!');
 		}
 		return eth;
